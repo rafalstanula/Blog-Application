@@ -1,9 +1,18 @@
 package com.stanula.domain;
 
-public final class Post {
+import javax.persistence.*;
 
-    private final String author;
-    private final String content;
+@Entity
+@Table(name = "POSTS")
+public class Post {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "author", length = 100, nullable = false)
+    private String author;
+    private String content;
 
     private Post(String author, String content) {
         this.author = author;
