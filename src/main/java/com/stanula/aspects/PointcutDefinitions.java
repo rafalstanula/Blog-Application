@@ -9,14 +9,14 @@ public class PointcutDefinitions {
     public void getPostsServiceMethodPointcut() {
     }
 
-    @Pointcut("@within(org.stanula.stereotype.Service)")
+    @Pointcut("@within(org.springframework.stereotype.Service)")
     public void serviceMethodsPointcut() {
-
     }
 
-    @Pointcut("within(com.kicinger.tutorials.repositories.*)")
+    @Pointcut("within(com.stanula.repositories.*)")
     public void repositoryPackagePointcut() {
     }
+
     @Pointcut("execution(* com.stanula.controller.PostController.*(..))")
     public void postsControllerRequestHandlerPointcut() {
     }
