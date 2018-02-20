@@ -1,0 +1,28 @@
+<span>
+<nav xmlns:th="http://www.thymeleaf.org" class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" th:href="@{/}">
+            BLOG APP
+        </a>
+    </div>
+    <div id="navbar-collapse" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-utility">
+            <li id="ui-toggle" class="hidden"></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-primary">
+            <li>
+                <a th:href="@{/posts}">Posts</a>
+            </li>
+            <li>
+                <a th:href="@{'/posts/John%20Smith'}">Posts by author 2</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</span>
