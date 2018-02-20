@@ -16,6 +16,11 @@
         <version>1.5.8.RELEASE</version>
     </parent>
 
+    <properties>
+        <bootstrap.version>3.3.7</bootstrap.version>
+        <jquery.version>2.2.4</jquery.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
