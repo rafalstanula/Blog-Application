@@ -41,7 +41,8 @@ public class LoggingAspect {
     @Before("PointcutDefinitions.postsControllerRequestHandlerPointcut() && args(model)")
     public void logMethodsArguments(JoinPoint joinPoint, Model model) {
         System.out.println("PostsController before aspect.");
-        System.out.println("\tMethod invoked with argument: " + model + " (or using getArgs() method: " + Arrays.deepToString(joinPoint.getArgs()) + ")");
+        System.out.println("\tMethod invoked with argument: " + model + " (or using getArgs() method: "
+                + Arrays.deepToString(joinPoint.getArgs()) + ")");
         System.out.println("\tMethod annotations: " + getAnnotationNames(joinPoint));
     }
 

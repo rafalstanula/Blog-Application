@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class PostController {
@@ -22,10 +23,9 @@ public class PostController {
         model.addAttribute("posts", postsService.getPosts());
         return "posts";
     }
-    @GetMapping("/posts/{aythor}")
+    @GetMapping("/posts/{author}")
     public String getPostByAuthor(Model model, @PathVariable String author){
         model.addAttribute("posts", postsService.getPosts(author));
         return "posts";
     }
-
 }
