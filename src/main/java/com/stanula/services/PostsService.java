@@ -21,8 +21,8 @@ public class PostsService {
         return postsRepository.findAll();
     }
 
-    public List<Post> getPosts(String author){
-      return postsRepository.findAllByAuthor(author);
+    public List<Post> getPosts(String author) {
+        return postsRepository.findAllByAuthor(author);
     }
 
 }

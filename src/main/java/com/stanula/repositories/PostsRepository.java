@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PostsRepository extends JpaRepository<Post, Long> {
 
-    List<Post> findAllByAuthor(String autor);
+    List<Post> findAllByAuthor(String author);
 }
