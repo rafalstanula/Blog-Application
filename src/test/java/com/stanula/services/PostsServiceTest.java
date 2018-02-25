@@ -16,9 +16,6 @@ public class PostsServiceTest {
 
     private PostsRepository repositoryMock;
     private PostsService postsService;
-    private List<Post> listOfPostsWithDifferentAuthors;
-    private List<Post> listWithOnePost;
-    private List<Post> listOfPostsWithOneAuthor;
     private List<Post> emptyList;
     private Post redPost;
     private Post bluePost;
@@ -28,21 +25,17 @@ public class PostsServiceTest {
     public void setUp() {
         repositoryMock = mock(PostsRepository.class);
         postsService = new PostsService(repositoryMock);
-        listOfPostsWithDifferentAuthors = new ArrayList<>();
-        listWithOnePost = new ArrayList<>();
-        listOfPostsWithOneAuthor = new ArrayList<>();
         emptyList = new ArrayList<>();
-
         redPost = Post.createPost("John", "My red post");
         bluePost = Post.createPost("John", "My blue post");
         greenPost = Post.createPost("Max", "My green post");
-        listOfPostsWithDifferentAuthors = Arrays.asList(redPost, bluePost, greenPost);
-        listOfPostsWithOneAuthor = Arrays.asList(redPost, bluePost);
-        listWithOnePost = Arrays.asList(redPost);
     }
 
     @Test
     public void shouldReturnListOfPostsWhenGetPostsWithoutParametersIsCall() {
+        List<Post> listOfPostsWithDifferentAuthors = Arrays.asList(redPost, bluePost, greenPost);
+        List<Post> listWithOnePost = Arrays.asList(redPost);
+
         when(repositoryMock.findAll()).thenReturn(listOfPostsWithDifferentAuthors)
                 .thenReturn(listWithOnePost)
                 .thenReturn(emptyList);
@@ -54,6 +47,8 @@ public class PostsServiceTest {
 
     @Test
     public void shouldReturnListOfPostWhenGetPostsWithParameterIsCall() {
+        List<Post> listOfPostsWithOneAuthor = Arrays.asList(redPost, bluePost);
+
         when(repositoryMock.findAllByAuthor("John")).thenReturn(listOfPostsWithOneAuthor);
         when(repositoryMock.findAllByAuthor("David")).thenReturn(emptyList);
 
