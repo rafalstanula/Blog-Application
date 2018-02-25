@@ -2,59 +2,73 @@ package com.stanula.services;
 
 import com.stanula.domain.Post;
 import com.stanula.repositories.PostsRepository;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class PostsServiceTest {
 
-    @Test
-    public void shouldReturnListOfPostsWhenGetPostsWithoutParametersIsCall(){
-        List<Post> listOfPosts = prepareListOfPosts();
-        PostsRepository repositoryMock = mock(PostsRepository.class);
-        PostsService postsService = new PostsService(repositoryMock);
+    private PostsRepository repositoryMock;
+    private PostsService postsService;
+    private List<Post> listOfPostsWithDifferentAuthors;
+    private List<Post> listWithOnePost;
+    private List<Post> listOfPostsWithOneAuthor;
+    private List<Post> emptyList;
+    private Post redPost;
+    private Post bluePost;
+    private Post greenPost;
 
-        when(repositoryMock.findAll()).thenReturn(listOfPosts);
+    @Before
+    public void setUp() {
+        repositoryMock = mock(PostsRepository.class);
+        postsService = new PostsService(repositoryMock);
+        listOfPostsWithDifferentAuthors = new ArrayList<>();
+        listWithOnePost = new ArrayList<>();
+        listOfPostsWithOneAuthor = new ArrayList<>();
+        emptyList = new ArrayList<>();
 
-        assertThat(postsService.getPosts().get(2).getAuthor()).isEqualTo("John");
-        assertThat(postsService.getPosts().get(1).getContent()).isEqualTo("SecondComment");
-        assertThat(postsService.getPosts().size()).isEqualTo(3);
+        redPost = Post.createPost("John", "My red post");
+        bluePost = Post.createPost("John", "My blue post");
+        greenPost = Post.createPost("Max", "My green post");
+        listOfPostsWithDifferentAuthors = Arrays.asList(redPost, bluePost, greenPost);
+        listOfPostsWithOneAuthor = Arrays.asList(redPost, bluePost);
+        listWithOnePost = Arrays.asList(redPost);
     }
 
     @Test
-    public void shouldReturnListOfPostWhenGetPostsWithParameterIsCall(){
-        List<Post> listOfPosts = prepareListOfPosts();
-        PostsRepository repositoryMock = mock(PostsRepository.class);
-        PostsService postsService = new PostsService(repositoryMock);
+    public void shouldReturnListOfPostsWhenGetPostsWithoutParametersIsCall() {
+        when(repositoryMock.findAll()).thenReturn(listOfPostsWithDifferentAuthors)
+                .thenReturn(listWithOnePost)
+                .thenReturn(emptyList);
 
-        when(repositoryMock.findAllByAuthor("John")).thenReturn(listOfPosts);
-
-        assertThat(postsService.getPosts("John").get(0).getContent()).isEqualTo("FirstComment");
-        assertThat(postsService.getPosts("John").get(1).getContent()).isEqualTo("SecondComment");
-        assertThat(postsService.getPosts("John").get(2).getContent()).isEqualTo("ThirdComment");
-        assertThat(postsService.getPosts("John").size()).isEqualTo(3);
+        assertThat(postsService.getPosts()).containsOnly(redPost, bluePost, greenPost);
+        assertThat(postsService.getPosts()).containsOnly(redPost);
+        assertThat(postsService.getPosts()).isEmpty();
     }
 
-    private List<Post> prepareListOfPosts(){
-        List<Post> listOfPosts = new ArrayList<>();
-        listOfPosts.add(Post.createPost("John", "FirstComment"));
-        listOfPosts.add(Post.createPost("John", "SecondComment"));
-        listOfPosts.add(Post.createPost("John", "ThirdComment"));
+    @Test
+    public void shouldReturnListOfPostWhenGetPostsWithParameterIsCall() {
+        when(repositoryMock.findAllByAuthor("John")).thenReturn(listOfPostsWithOneAuthor);
+        when(repositoryMock.findAllByAuthor("David")).thenReturn(emptyList);
 
-        return listOfPosts;
+        assertThat(postsService.getPosts("John")).contains(redPost, bluePost)
+                .extracting("content")
+                .contains("My red post", "My blue post");
+        assertThat(postsService.getPosts("David")).isEmpty();
     }
 
     @Test(expected = NullPointerException.class)
-    public void shouldThrowNullPointerExceptionWhenInstanceOfPostsRepositoryIsNotCreated(){
+    public void shouldThrowNullPointerExceptionWhenInstanceOfPostsRepositoryIsNotCreated() {
         PostsRepository postsRepository = null;
         PostsService postsService = new PostsService(postsRepository);
 
         postsService.getPosts();
+        postsService.getPosts("John");
     }
 }
