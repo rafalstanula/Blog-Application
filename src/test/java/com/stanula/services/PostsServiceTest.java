@@ -5,8 +5,8 @@ import com.stanula.repositories.PostsRepository;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -16,7 +16,6 @@ public class PostsServiceTest {
 
     private PostsRepository repositoryMock;
     private PostsService postsService;
-    private List<Post> emptyList;
     private Post redPost;
     private Post bluePost;
     private Post greenPost;
@@ -25,36 +24,51 @@ public class PostsServiceTest {
     public void setUp() {
         repositoryMock = mock(PostsRepository.class);
         postsService = new PostsService(repositoryMock);
-        emptyList = new ArrayList<>();
         redPost = Post.createPost("John", "My red post");
         bluePost = Post.createPost("John", "My blue post");
         greenPost = Post.createPost("Max", "My green post");
     }
 
     @Test
-    public void shouldReturnListOfPostsWhenGetPostsWithoutParametersIsCall() {
+    public void shouldReturnThreePostsWhenGetPostsWithoutParametersIsCall() {
         List<Post> listOfPostsWithDifferentAuthors = Arrays.asList(redPost, bluePost, greenPost);
-        List<Post> listWithOnePost = Arrays.asList(redPost);
 
-        when(repositoryMock.findAll()).thenReturn(listOfPostsWithDifferentAuthors)
-                .thenReturn(listWithOnePost)
-                .thenReturn(emptyList);
+        when(repositoryMock.findAll()).thenReturn(listOfPostsWithDifferentAuthors);
 
         assertThat(postsService.getPosts()).containsOnly(redPost, bluePost, greenPost);
+    }
+
+    @Test
+    public void shouldReturnOnePostWhenGetPostsWithoutParametersIsCall() {
+        List<Post> listWithOnePost = Arrays.asList(redPost);
+
+        when(repositoryMock.findAll()).thenReturn(listWithOnePost);
+
         assertThat(postsService.getPosts()).containsOnly(redPost);
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenGetPostsWithoutParametersIsCall() {
+        when(repositoryMock.findAll()).thenReturn(Collections.emptyList());
+
         assertThat(postsService.getPosts()).isEmpty();
     }
 
     @Test
-    public void shouldReturnListOfPostWhenGetPostsWithParameterIsCall() {
+    public void shouldReturnTwoPostsListOfPostWhenGetPostsWithParameterIsCall() {
         List<Post> listOfPostsWithOneAuthor = Arrays.asList(redPost, bluePost);
 
         when(repositoryMock.findAllByAuthor("John")).thenReturn(listOfPostsWithOneAuthor);
-        when(repositoryMock.findAllByAuthor("David")).thenReturn(emptyList);
 
         assertThat(postsService.getPosts("John")).contains(redPost, bluePost)
                 .extracting("content")
                 .contains("My red post", "My blue post");
+    }
+
+    @Test
+    public void shouldReturnEmptyListOfPostWhenGetPostsWithParameterIsCall() {
+        when(repositoryMock.findAllByAuthor("David")).thenReturn(Collections.emptyList());
+
         assertThat(postsService.getPosts("David")).isEmpty();
     }
 
@@ -64,6 +78,5 @@ public class PostsServiceTest {
         PostsService postsService = new PostsService(postsRepository);
 
         postsService.getPosts();
-        postsService.getPosts("John");
     }
 }
