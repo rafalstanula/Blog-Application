@@ -14,6 +14,9 @@ public class Post {
     private String author;
     private String content;
 
+    public Post() {
+    }
+
     private Post(String author, String content) {
         this.author = author;
         this.content = content;
@@ -29,5 +32,9 @@ public class Post {
 
     public String getContent() {
         return content;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
