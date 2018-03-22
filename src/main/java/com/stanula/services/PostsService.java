@@ -25,4 +25,7 @@ public class PostsService {
         return postsRepository.findAllByAuthor(author);
     }
 
+    public void addPost(Post post) {
+        postsRepository.save(post);
+    }
 }

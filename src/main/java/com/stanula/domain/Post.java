@@ -14,7 +14,7 @@ public class Post {
     private String author;
     private String content;
 
-    public Post() {
+    private Post() {
     }
 
     private Post(String author, String content) {
