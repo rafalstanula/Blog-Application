@@ -34,7 +34,7 @@ public class PostController {
         return "posts";
     }
 
-    @PostMapping("/post")
+    @PostMapping("/postForm")
     public String addPost(@ModelAttribute @Valid Post post){
         postsService.addPost(post);
         return "postForm";
