@@ -1,6 +1,13 @@
 package com.stanula.domain;
 
-import javax.persistence.*;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "POSTS")
@@ -10,11 +17,16 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+
     @Column(name = "author", length = 100, nullable = false)
+    @NotEmpty
     private String author;
+
+    @Column(name = "content", length = 1000, nullable = false)
+    @NotEmpty
     private String content;
 
-    public Post() {
+    private Post() {
     }
 
     private Post(String author, String content) {
