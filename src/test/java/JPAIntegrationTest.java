@@ -19,62 +19,62 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = BlogApplication.class)
 public class JPAIntegrationTest {
 
-    @Autowired
-    private PostsRepository postsRepository;
+	@Autowired
+	private PostsRepository postsRepository;
 
-    private Post redPost;
-    private Post bluePost;
-    private Post greenPost;
-    private List<Post> listOfPosts;
+	private Post redPost;
+	private Post bluePost;
+	private Post greenPost;
+	private List<Post> listOfPosts;
 
-    @Before
-    public void setUp() {
-        redPost = Post.createPost("John", "My red post");
-        bluePost = Post.createPost("John", "My blue post");
-        greenPost = Post.createPost("Max", "My green post");
-        listOfPosts = Arrays.asList(redPost, bluePost, greenPost);
-        postsRepository.deleteAll();
-    }
+	@Before
+	public void setUp() {
+		redPost = Post.createPost("John", "My red post");
+		bluePost = Post.createPost("John", "My blue post");
+		greenPost = Post.createPost("Max", "My green post");
+		listOfPosts = Arrays.asList(redPost, bluePost, greenPost);
+		postsRepository.deleteAll();
+	}
 
-    @Test
-    public void givenOnePost_whenSaveAndRetrievePost_thenRetrievedPostIsNotNull() {
-        Post savedPost = postsRepository.save(redPost);
-        Post foundPost = postsRepository.findOne(savedPost.getId());
+	@Test
+	public void givenOnePost_whenSaveAndRetrievePost_thenRetrievedPostIsNotNull() {
+		Post savedPost = postsRepository.save(redPost);
+		Post foundPost = postsRepository.findOne(savedPost.getId());
 
-        assertNotNull(foundPost);
-    }
+		assertNotNull(foundPost);
+	}
 
-    @Test
-    public void givenOnePost_whenSaveAndRetrieveOnePost_thenSavedAndRetrievedHaveEqualContent() {
-        Post savedPost = postsRepository.save(redPost);
-        Post foundPost = postsRepository.findOne(savedPost.getId());
+	@Test
+	public void givenOnePost_whenSaveAndRetrieveOnePost_thenSavedAndRetrievedHaveEqualContent() {
+		Post savedPost = postsRepository.save(redPost);
+		Post foundPost = postsRepository.findOne(savedPost.getId());
 
-        assertThat(savedPost.getContent()).isEqualTo(foundPost.getContent());
-    }
+		assertThat(savedPost.getContent()).isEqualTo(foundPost.getContent());
+	}
 
-    @Test
-    public void givenListOfThreePosts_whenSaveAndRetrieveAllPost_thenAllReturnedContentsAreEqual() {
-        postsRepository.save(listOfPosts);
-        List<Post> foundListOfPosts = postsRepository.findAll();
+	@Test
+	public void givenListOfThreePosts_whenSaveAndRetrieveAllPost_thenAllReturnedContentsAreEqual() {
+		postsRepository.save(listOfPosts);
+		List<Post> foundListOfPosts = postsRepository.findAll();
 
-        assertThat(foundListOfPosts.get(0).getContent()).isEqualTo(listOfPosts.get(0).getContent());
-        assertThat(foundListOfPosts.get(1).getContent()).isEqualTo(listOfPosts.get(1).getContent());
-        assertThat(foundListOfPosts.get(2).getContent()).isEqualTo(listOfPosts.get(2).getContent());
-    }
+		assertThat(foundListOfPosts.get(0).getContent()).isEqualTo(listOfPosts.get(0).getContent());
+		assertThat(foundListOfPosts.get(1).getContent()).isEqualTo(listOfPosts.get(1).getContent());
+		assertThat(foundListOfPosts.get(2).getContent()).isEqualTo(listOfPosts.get(2).getContent());
+	}
 
-    @Test
-    public void givenListOfThreePosts_whenPostsAreSaveAndPostsFromOneAuthorAreRequested_thenTwoPostsAreReturned() {
-        postsRepository.save(listOfPosts);
-        List<Post> foundListOfPosts = postsRepository.findAllByAuthor("John");
+	@Test
+	public void givenListOfThreePosts_whenPostsAreSaveAndPostsFromOneAuthorAreRequested_thenTwoPostsAreReturned() {
+		postsRepository.save(listOfPosts);
+		List<Post> foundListOfPosts = postsRepository.findAllByAuthor("John");
 
-        assertThat(foundListOfPosts).hasSize(2);
-    }
+		assertThat(foundListOfPosts).hasSize(2);
+	}
 
-    @Test
-    public void givenListOfThreePosts_whenPostsAreSaveAndPostsFromOneAuthorAreRequested_thenDoNotReturnedAnyPosts() {
-        postsRepository.save(listOfPosts);
-        List<Post> foundListOfPosts = postsRepository.findAllByAuthor("David");
+	@Test
+	public void givenListOfThreePosts_whenPostsAreSaveAndPostsFromOneAuthorAreRequested_thenDoNotReturnedAnyPosts() {
+		postsRepository.save(listOfPosts);
+		List<Post> foundListOfPosts = postsRepository.findAllByAuthor("David");
 
-        assertThat(foundListOfPosts).isEmpty();
-    }
+		assertThat(foundListOfPosts).isEmpty();
+	}
 }
